@@ -1,28 +1,36 @@
 // Функция, возвращающая случайное целое число из переданного диапазона включительно
 
-const getRandomNumber = function (minNumber, maxNumber) {
-
-  if (minNumber < maxNumber) {
-    return Math.floor(Math.random() * (maxNumber - minNumber) + minNumber);
+const getRandomNumber = (min, max) => {
+  if (min >= 0 && max >= 0) {
+    if (min === max) {
+      throw new RangeError('Значения диапазона не могут быть равны друг другу!');
+    }
+    if (min > max) {
+      const changePosition = min;
+      min = max;
+      max = changePosition;
+    }
+    return Math.floor(Math.random() * (max - min) + min);
   }
-  console.log('Начальное значение диапазона не должно быть больше (либо равно) конечному.');
+  throw new RangeError('Диапазон может быть только положительный!');
 };
-
-getRandomNumber (0, 0);
 
 // Функция, возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
 
-const getRandomFractional = function (minNumber, maxNumber, numberCut) {
-
-  if (minNumber === maxNumber) {
-    console.log('Значения диапазона не могут быть равны между собой.');
+const getRandomFloat = (min, max, digit) => {
+  if (min >= 0 && max >= 0) {
+    if (min === max) {
+      throw new RangeError('Значения диапазона не могут быть равны друг другу!');
+    }
+    if (min > max) {
+      const changePosition = min;
+      min = max;
+      max = changePosition;
+    }
+    return (Math.random() * (max - min) + min).toFixed(digit);
   }
-
-  if (minNumber > maxNumber) {
-    console.log('Начальное значение диапазона должно быть меньше, чем конечное.');
-  }
-
-  return (Math.random() * (maxNumber - minNumber) + minNumber).toFixed(numberCut);
+  throw new RangeError('Диапазон может быть только положительный!');
 };
 
-getRandomFractional (0, 0, 0);
+getRandomNumber (0, 0);
+getRandomFloat (0, 0, 0);
