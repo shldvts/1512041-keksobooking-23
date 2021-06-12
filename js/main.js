@@ -1,66 +1,51 @@
-/* АРХИВ
+// Функции получения случайного числа из заданного диапазона
 const getRandomNumber = (min, max) => {
-  if (min >= 0 && max >= 0) {
-    if (min === max) {
-      throw new RangeError('Значения диапазона не могут быть равны друг другу!');
-    }
-    if (min > max) {
-      const changePosition = min;
-      min = max;
-      max = changePosition;
-    }
-    return Math.floor(Math.random() * (max - min) + min);
-  }
-  throw new RangeError('Диапазон может быть только положительный!');
-};
-
-const getRandomFloat = (min, max, digit) => {
-  if (min >= 0 && max >= 0) {
-    if (min === max) {
-      throw new RangeError('Значения диапазона не могут быть равны друг другу!');
-    }
-    if (min > max) {
-      const changePosition = min;
-      min = max;
-      max = changePosition;
-    }
-    return (Math.random() * (max - min) + min).toFixed(digit);
-  }
-  throw new RangeError('Диапазон может быть только положительный!');
-}; */
-
-function getRandomNumber (min, max) {
   const lower = Math.ceil(Math.min(Math.abs(min), Math.abs(max)));
   const upper = Math.floor(Math.max(Math.abs(min), Math.abs(max)));
   const result = Math.random() * (upper - lower + 1) + lower;
   return Math.floor(result);
 };
 
-function getRandomFloat (min, max, digits = 1) {
+const getRandomFloat = (min, max, digit) => {
   const lower = Math.min(Math.abs(min), Math.abs(max));
   const upper = Math.max(Math.abs(min), Math.abs(max));
   const result = Math.random() * (upper - lower) + lower;
-  return result.toFixed(digits);
+  return Number(result.toFixed(digit));
 };
-
-getRandomNumber (0, 0);
-getRandomFloat (0, 0, 0);
 
 // Функции для создания массива из 10 сгенерированных JS-объектов. Каждый объект массива — описание похожего объявления неподалёку.
 
-const AUTHOR = 'img/avatars/user0' + getRandomNumber (1, 8) + '.png';
-
+// Переменные
 const TITLES = 'Вас также может заинтересовать:';
 
-const ADDRESS = ['location.x', 'location.y',];
+const TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungalow',
+  'hotel',
+];
 
-const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel',];
+const CHECKINS = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
 
-const CHECKINS = ['12:00', '13:00', '14:00',];
+const CHECKOUTS = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
 
-const CHECKOUT = ['12:00', '13:00', '14:00',];
-
-const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner',];
+const FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner',
+];
 
 const DESCRIPTIONS = 'Лучше места для проживания и не придумать.';
 
@@ -70,47 +55,55 @@ const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-const LOCATION = {
-  lat: getRandomFloat (35.65000, 35.70000, 5),
-  lng: getRandomFloat (139.70000, 139.70000, 5),
-}
-
 // Функция: выводит произвольный элемент массива
+const getRandomArrayItem = (items) => items[_.random(0, items.length - 1)];
 
-const getRandomArrayElement = (elements) => {
-  return elements[_.random(0, elements.length - 1)];
-};
-
-// Функция: изменяет содержимое массива, удаляя его элементы
-
-const delRandomElementsArray = (someArray, startElement, delQuantity) => {
-  return someArray.splice(startElement, delQuantity);
+// Функция: создаёт новый массив со всеми элементами, прошедшими проверку, задаваемую в передаваемой функции
+const getRandomElementsArray = (items) => {
+  items.filter(() => Boolean(getRandomNumber(0, 1)));
 };
 
 // Функция: создаёт объект (описание похожего объявления неподалёку)
-
-const createOffer = () => {
+const createAuthor = (id) => {
+  const userId = id < 10 ? `0${id}` : id;
   return {
-    avatar: AUTHOR,
-    title: TITLES,
-    address: ADDRESS,
-    price: getRandomNumber(1000, 1000000),
-    type: getRandomArrayElement(TYPES),
-    rooms: getRandomNumber(1, 15),
-    guests: getRandomNumber(1, 10),
-    checkin: getRandomArrayElement(CHECKINS),
-    checkout: getRandomArrayElement(CHECKOUT),
-    features: delRandomElementsArray(FEATURES, getRandomNumber(0,(FEATURES.length - 1)), getRandomNumber(0, (FEATURES.length - 1))),
-    description: DESCRIPTIONS,
-    photos: delRandomElementsArray(PHOTOS, getRandomNumber(0,(PHOTOS.length - 1)), getRandomNumber(0, (PHOTOS.length - 1))),
-    location: LOCATION,
+    avatar: `img/avatars/user${userId}.png`,
+  };
+};
+
+const createOffer = (location) => ({
+  title: TITLES,
+  address: `${location.lat}, ${location.lng}`,
+  price: getRandomNumber(1000, 10000),
+  type: getRandomArrayItem(TYPES),
+  rooms: getRandomNumber(1, 8),
+  guests: getRandomNumber(1, 10),
+  checkin: getRandomArrayItem(CHECKINS),
+  checkout: getRandomArrayItem(CHECKOUTS),
+  features: getRandomElementsArray(FEATURES),
+  description: DESCRIPTIONS,
+  photos: getRandomElementsArray(PHOTOS),
+});
+
+const createRandomLocation = () => ({
+  lat: getRandomFloat (35.65000, 35.70000, 5),
+  lng: getRandomFloat (139.70000, 139.80000, 5),
+});
+
+const createAdvert = (id) => {
+  const location = createRandomLocation();
+  return {
+    author: createAuthor(id),
+    offer: createOffer(location),
+    location,
   };
 };
 
 // Функция: создаёт массив из заданного количества сгенерированных объектов
+const ADVERT_COUNT = 10;
 
-const SIMILAR_OFFER_COUNT = 10;
+const adverts = new Array(ADVERT_COUNT)
+  .fill(null)
+  .map((_, index) => createAdvert(index + 1));
 
-const similarOffers = new Array(SIMILAR_OFFER_COUNT).fill(null).map(() => createOffer());
-
-similarOffers();
+adverts;
