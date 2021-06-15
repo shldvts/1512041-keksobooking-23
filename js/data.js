@@ -1,4 +1,4 @@
-export const TITLES = 'Вас также может заинтересовать:';
+export const TITLE = 'Вас также может заинтересовать:';
 
 export const TYPES = [
   'palace',
@@ -29,7 +29,7 @@ export const FEATURES = [
   'conditioner',
 ];
 
-export const DESCRIPTIONS = 'Лучше места для проживания и не придумать.';
+export const DESCRIPTION = 'Лучше места для проживания и не придумать.';
 
 export const PHOTOS = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',

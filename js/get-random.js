@@ -15,7 +15,8 @@ export const getRandomFloat = (min, max, digit) => {
 };
 
 // Функция вывода произвольного элемента массива
-export const getRandomArrayItem = (items) => items[_.random(0, items.length - 1)];
+export const getRandomArrayItem = (items) => items[getRandomNumber(0, items.length - 1)];
 
 // Функция создания нового массива со всеми элементами, прошедшими проверку, задаваемую в передаваемой функции
-export const getRandomElementsArray = (items) => items.filter(() => Boolean(getRandomNumber(0, 1)));
+export const getRandomArrayItems = (items) => items.filter(() => Boolean(getRandomNumber(0, 1)));
+

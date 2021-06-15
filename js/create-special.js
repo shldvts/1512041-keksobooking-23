@@ -1,5 +1,5 @@
-import { TITLES, TYPES, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTIONS, PHOTOS } from './data.js';
-import { getRandomNumber, getRandomFloat, getRandomArrayItem, getRandomElementsArray } from './get-random.js';
+import { TITLE, TYPES, CHECKINS, CHECKOUTS, FEATURES, DESCRIPTION, PHOTOS } from './data.js';
+import { getRandomNumber, getRandomFloat, getRandomArrayItem, getRandomArrayItems } from './get-random.js';
 
 // Функция создания адреса изображения вида img/avatars/user{{xx}}.png, где {{xx}} — это число от 1 до 10
 // Перед однозначными числами ставится 0. Например, 01, 02...10. Адреса изображений не повторяются
@@ -12,7 +12,7 @@ export const createAuthor = (id) => {
 
 // Функция создания объекта, содержащего информацию об объявлении
 export const createOffer = (location) => ({
-  title: TITLES,
+  title: TITLE,
   address: `${location.lat}, ${location.lng}`,
   price: getRandomNumber(1000, 10000),
   type: getRandomArrayItem(TYPES),
@@ -20,9 +20,9 @@ export const createOffer = (location) => ({
   guests: getRandomNumber(1, 10),
   checkin: getRandomArrayItem(CHECKINS),
   checkout: getRandomArrayItem(CHECKOUTS),
-  features: getRandomElementsArray(FEATURES),
-  description: DESCRIPTIONS,
-  photos: getRandomElementsArray(PHOTOS),
+  features: getRandomArrayItems(FEATURES),
+  description: DESCRIPTION,
+  photos: getRandomArrayItems(PHOTOS),
 });
 
 // Функция создания объекта местоположения в виде географических координат
@@ -42,3 +42,6 @@ export const createAdvert = (id) => {
     location,
   };
 };
+
+// Функция: создаёт массив из заданного количества сгенерированных объектов
+export const createRandomAdverts = (count) => new Array(count).fill(null).map((_, index) => createAdvert(index + 1));
