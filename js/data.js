@@ -8,15 +8,6 @@ export const TYPES = [
   'hotel',
 ];
 
-// Словарик Англ-Рус
-export const offerTypesEnToRu = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
-  hotel: 'Отель',
-};
-
 export const CHECKINS = [
   '12:00',
   '13:00',

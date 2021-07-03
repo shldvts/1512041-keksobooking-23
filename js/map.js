@@ -6,4 +6,3 @@ export const addCard = (advert) => {
   const card = renderCard(advert);
   mapCanvas.appendChild(card);
 };
-
