@@ -6,7 +6,7 @@ const titleInput = advertForm.querySelector('#title');
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 
-const limitTitleLength = () => {
+const restrictTitleLength = () => {
   const valueLength = titleInput.value.length;
 
   if (valueLength < MIN_TITLE_LENGTH) {
@@ -21,7 +21,7 @@ const limitTitleLength = () => {
 };
 
 titleInput.addEventListener('input', () => {
-  limitTitleLength();
+  restrictTitleLength();
 });
 
 // Соответствие полей типа жилья и цены
@@ -82,7 +82,7 @@ roomInput.addEventListener('change', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  limitTitleLength();
+  restrictTitleLength();
   syncTypeAndPriceInput();
   validateRoomsAndCapacityInput();
 });
