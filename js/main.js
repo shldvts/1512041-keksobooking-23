@@ -1,7 +1,7 @@
 import { createRandomAdverts } from './random-adverts.js';
 // import { addCard, activateMap, deactivateMap } from './map.js';
 import './map.js';
-import './form.js';
+import { addCard } from './form.js';
 
 const randomAdverts = createRandomAdverts(10);
 
