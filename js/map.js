@@ -1,84 +1,78 @@
 import { renderCard } from './card.js';
 
-const mapCanvas = document.querySelector('.map__canvas');
-
-export const addCard = (advert) => {
-  const card = renderCard(advert);
-  mapCanvas.appendChild(card);
+const TokyoCenterCoord = {
+  LAT: 35.6894,
+  LNG: 139.692,
 };
 
-// Интерактивная карта
+const VIEW_ZOOM = 12;
 
 const map = L.map('map-canvas')
-  //.on('load', () => {
-  //  console.log('Карта загружена.');
-  //})
   .setView({
-    lat: 59.96831,
-    lng: 30.31748,
-  }, 12);
+    lat: TokyoCenterCoord.LAT,
+    lng: TokyoCenterCoord.LNG,
+  }, VIEW_ZOOM);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }).addTo(map);
 
-const createCustomPopup = (point) => {
-  const balloonTemplate = document.querySelector('#balloon').content.querySelector('.balloon');
-  const customPopup = balloonTemplate.cloneNode(true);
+L.layerGroup().addTo(map);
 
-  customPopup.querySelector('.balloon__title').textContent = point.title;
-  customPopup.querySelector('.balloon__lat-lng').textContent = `Координаты: ${point.lat}, ${point.lng}`;
+const pinIcon = L.icon({
+  iconUrl: '../img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
 
-  return customPopup;
-};
+const mainPinIcon = L.icon({
+  iconUrl: '../img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
 
-const markerGroup = L.layerGroup().addTo(map);
+const mainPinMarker = L.marker(
+  {
+    lat: TokyoCenterCoord.LAT,
+    lng: TokyoCenterCoord.LNG,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+
+mainPinMarker.addTo(map);
 
 const createMarker = (point) => {
-
-  const mainPinIcon = L.icon({
-    iconUrl: '../leaflet/images/marker-icon-2x.png',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
-  });
-
   const marker = L.marker(
     {
-      lat: 59.96831,
-      lng: 30.31748,
+      lat: point.location.lat,
+      lng: point.location.lng,
     },
     {
-      draggable: true,
-      icon: mainPinIcon,
+      icon: pinIcon,
     },
   );
 
   marker
     .addTo(map)
     .bindPopup(
-      createCustomPopup(point),
+      renderCard(point),
       {
         keepInView: true,
       },
     );
 };
 
-createMarker();
+export const addPoints = (adverts) => {
+  adverts.forEach(createMarker);
+};
 
-// marker.on('moveend', (evt) => {
-//   console.log(evt.target.getLatLng());
-// });
+const addressInput = document.querySelector('#address');
 
-resetButton.addEventListener('click', () => {
-  mainPinMarker.setLatLng ({
-    lat: 59.96831,
-    lng: 30.31748,
-  });
+mainPinMarker.on('drag', (evt) => {
+  const { lat, lng } = evt.target.getLatLng();
 
-  map.setView({
-    lat: 59.96831,
-    lng: 30.31748,
-  }, 16);
+  addressInput.value = `${lat}, ${lng}`;
 });
-
-markerGroup.clearLayers();

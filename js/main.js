@@ -1,8 +1,8 @@
 import { createRandomAdverts } from './random-adverts.js';
 // import { addCard, activateMap, deactivateMap } from './map.js';
-import './map.js';
-import { addCard } from './form.js';
+import { addPoints } from './map.js';
+import './form.js';
 
 const randomAdverts = createRandomAdverts(10);
 
-addCard(randomAdverts[5]);
+addPoints(randomAdverts);

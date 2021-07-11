@@ -2,7 +2,6 @@ const advertForm = document.querySelector('.ad-form');
 const titleInput = advertForm.querySelector('#title');
 
 // Валидация поля заголовка
-
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 
@@ -59,19 +58,19 @@ const roomsToCapacities = {
   100: [0],
 };
 
-const checkCapacityInput = (capacities) => capacities.includes(+capacityInput.value);
-
 const validateRoomsAndCapacityInput = () => {
   const rooms = roomInput.value;
   const capacities  = roomsToCapacities[rooms];
 
   capacityList.forEach((option) => {
-    option.disabled = !checkCapacityInput(capacities);
+    option.disabled = !capacities.includes(+option.value);
   });
 
-  const capacityErrorMessage = checkCapacityInput(capacities)
+  const capacityValue = +capacityInput.value;
+
+  const capacityErrorMessage = capacities.includes(capacityValue)
     ? ''
-    : `Неправильное количество мест: ${+capacityInput.value}`;
+    : `Неправильное количество мест: ${capacityValue}`;
 
   capacityInput.setCustomValidity(capacityErrorMessage);
   capacityInput.reportValidity();
@@ -82,7 +81,7 @@ roomInput.addEventListener('change', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  restrictTitleLength();
-  syncTypeAndPriceInput();
-  validateRoomsAndCapacityInput();
+  // restrictTitleLength();
+  // syncTypeAndPriceInput();
+  // validateRoomsAndCapacityInput();
 });
