@@ -6,3 +6,11 @@ import './form.js';
 const randomAdverts = createRandomAdverts(10);
 
 addPoints(randomAdverts);
+
+/*
+fetch('https://23.javascript.pages.academy/keksobooking/data')
+  .then((response) => response.json())
+  .then((adverts) => {
+    console.log(adverts);
+  });
+*/
