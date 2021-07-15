@@ -46,6 +46,18 @@ typeInput.addEventListener('change', () => {
   syncTypeAndPriceInput();
 });
 
+// Соответствие полей времени въезда и выезда
+const timeinInput = advertForm.querySelector('#timein');
+const timeoutInput = advertForm.querySelector('#timeout');
+
+timeinInput.addEventListener('change', () => {
+  timeoutInput.value = timeinInput.value;
+});
+
+timeoutInput.addEventListener('change', () => {
+  timeinInput.value = timeoutInput.value;
+});
+
 // Соответствие полей количества комнат количеству мест (гостей)
 const roomInput = advertForm.querySelector('#room_number');
 const capacityInput = advertForm.querySelector('#capacity');
