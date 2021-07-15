@@ -97,3 +97,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // syncTypeAndPriceInput();
   // validateRoomsAndCapacityInput();
 });
+
+const fieldsets = advertForm.querySelectorAll('fieldset');
+
+export const deactivateForm = () => {
+  advertForm.classList.add('ad-form--disabled');
+
+  fieldsets.forEach((field) => {
+    field.disabled = true;
+  });
+};
+
+export const activateForm = () => {
+  advertForm.classList.remove('ad-form--disabled');
+
+  fieldsets.forEach((field) => {
+    field.disabled = false;
+  });
+};
+
+deactivateForm();

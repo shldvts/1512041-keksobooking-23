@@ -1,9 +1,6 @@
 import { renderCard } from './card.js';
-
-/*const deactivateMap = () => {
-  const advertForm = document.querySelector('.ad-form');
-  advertForm.classList.add('ad-form--disabled');
-};*/
+import { activateForm } from './form.js';
+import { activateFilter } from './filter.js';
 
 const TokyoCenterCoord = {
   LAT: 35.6894,
@@ -13,11 +10,10 @@ const TokyoCenterCoord = {
 const VIEW_ZOOM = 12;
 
 const map = L.map('map-canvas')
-  /*.on('load', () => {
-    if (false) {
-      deactivateMap();
-    }
-  })*/
+  .on('load', () => {
+    activateFilter();
+    activateForm();
+  })
   .setView({
     lat: TokyoCenterCoord.LAT,
     lng: TokyoCenterCoord.LNG,
@@ -53,6 +49,13 @@ const mainPinMarker = L.marker(
 );
 
 mainPinMarker.addTo(map);
+
+/*
+const resetMarker = (lat, lng) => {
+  mainPinMarker.setLatLng([lat, lng]);
+};
+resetMarker(TokyoCenterCoord.LAT, TokyoCenterCoord.LNG);
+*/
 
 const createMarker = (point) => {
   const marker = L.marker(
