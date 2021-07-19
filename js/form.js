@@ -1,7 +1,10 @@
+import { sendData, showErrorMessage } from './api.js';
+
 const advertForm = document.querySelector('.ad-form');
-const titleInput = advertForm.querySelector('#title');
 
 // Валидация поля заголовка
+const titleInput = advertForm.querySelector('#title');
+
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 
@@ -117,3 +120,15 @@ export const activateForm = () => {
 };
 
 deactivateForm();
+
+export const setFormSubmit = (onSuccess) => {
+  advertForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    
+    sendData(
+      () => onSuccess(),
+      () => showErrorMessage('Не удалось отправить форму. Попробуйте ещё раз'),
+      new FormData(evt.target),
+    );
+  });
+};

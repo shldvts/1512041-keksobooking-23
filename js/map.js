@@ -50,13 +50,6 @@ const mainPinMarker = L.marker(
 
 mainPinMarker.addTo(map);
 
-/*
-const resetMarker = (lat, lng) => {
-  mainPinMarker.setLatLng([lat, lng]);
-};
-resetMarker(TokyoCenterCoord.LAT, TokyoCenterCoord.LNG);
-*/
-
 const createMarker = (point) => {
   const marker = L.marker(
     {
