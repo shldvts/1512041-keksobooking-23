@@ -17,4 +17,45 @@ export const deactivateFilter = () => {
   });
 };
 
-deactivateFilter();
+const housingFeatures = document.querySelector('#housing-features');
+
+let currentFeatures = [];
+
+// кокретные функции фильтрации
+
+// общая функция фильтрации
+
+export const filterAdverts = (adverts, limit) => {
+  currentFeatures = Array.from(housingFeatures.querySelectorAll('input:checked'));
+
+  const filteredAdverts = [];
+  for (let i = 0; i < adverts.length; i++) {
+    const advert = adverts[i];
+
+    if (true) { // если true
+      filteredAdverts.push(advert);
+    }
+
+    if (filteredAdverts.length === limit) {
+      break;
+    }
+  }
+
+  currentFeatures = null;
+
+  return filteredAdverts;
+};
+
+filterAdverts();
+
+let onFiltersChange = null;
+
+filters.addEventListener('change', () => {
+  if (typeof onFiltersChange === 'function') {
+    onFiltersChange();
+  }
+});
+
+export const setFiltersChangeHandler = (callback) => {
+  onFiltersChange = callback;
+};

@@ -1,4 +1,4 @@
-import { sendData, showErrorMessage } from './api.js';
+import { sendData } from './api.js';
 
 const advertForm = document.querySelector('.ad-form');
 
@@ -119,15 +119,13 @@ export const activateForm = () => {
   });
 };
 
-deactivateForm();
-
-export const setFormSubmit = (onSuccess) => {
+export const setFormSubmit = (onSuccess, onFail) => {
   advertForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    
+
     sendData(
-      () => onSuccess(),
-      () => showErrorMessage('Не удалось отправить форму. Попробуйте ещё раз'),
+      onSuccess,
+      onFail,
       new FormData(evt.target),
     );
   });
