@@ -7,7 +7,9 @@ const TokyoCenterCoord = {
 
 const VIEW_ZOOM = 12;
 
+
 const map = L.map('map-canvas');
+const groupLayer = L.layerGroup();
 
 export const createMap = (callback) => {
   map
@@ -18,13 +20,13 @@ export const createMap = (callback) => {
       lat: TokyoCenterCoord.LAT,
       lng: TokyoCenterCoord.LNG,
     }, VIEW_ZOOM);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(map);
-
-  L.layerGroup().addTo(map);
 };
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+}).addTo(map);
+
+groupLayer.addTo(map);
 
 const pinIcon = L.icon({
   iconUrl: '../img/pin.svg',
@@ -51,14 +53,22 @@ const mainPinMarker = L.marker(
 
 mainPinMarker.addTo(map);
 
+const addressInput = document.querySelector('#address');
+
+const renderAddressInput = () => {
+  const { lat, lng } = mainPinMarker.getLatLng();
+
+  addressInput.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+};
+
 export const resetMainMarkerPosition = () => {
   mainPinMarker.setLatLng({
     lat: TokyoCenterCoord.LAT,
     lng: TokyoCenterCoord.LNG,
   });
-};
 
-const groupLayer = L.layerGroup();
+  renderAddressInput();
+};
 
 const createMarker = (point) => {
   const marker = L.marker(
@@ -87,10 +97,6 @@ export const addPoints = (adverts) => {
 
 export const clearMap = () => groupLayer.clearLayers();
 
-const addressInput = document.querySelector('#address');
-
 mainPinMarker.on('drag', (evt) => {
-  const { lat, lng } = evt.target.getLatLng();
-
-  addressInput.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+  renderAddressInput(evt);
 });
