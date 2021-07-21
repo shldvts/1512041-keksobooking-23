@@ -1,6 +1,4 @@
 import { renderCard } from './card.js';
-import { activateForm } from './form.js';
-import { activateFilter } from './filter.js';
 
 const TokyoCenterCoord = {
   LAT: 35.6894,
@@ -9,21 +7,24 @@ const TokyoCenterCoord = {
 
 const VIEW_ZOOM = 12;
 
-const map = L.map('map-canvas')
-  .on('load', () => {
-    activateFilter();
-    activateForm();
-  })
-  .setView({
-    lat: TokyoCenterCoord.LAT,
-    lng: TokyoCenterCoord.LNG,
-  }, VIEW_ZOOM);
+const map = L.map('map-canvas');
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-}).addTo(map);
+export const createMap = (callback) => {
+  map
+    .on('load', () => {
+      callback();
+    })
+    .setView({
+      lat: TokyoCenterCoord.LAT,
+      lng: TokyoCenterCoord.LNG,
+    }, VIEW_ZOOM);
 
-L.layerGroup().addTo(map);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+  L.layerGroup().addTo(map);
+};
 
 const pinIcon = L.icon({
   iconUrl: '../img/pin.svg',
@@ -50,12 +51,14 @@ const mainPinMarker = L.marker(
 
 mainPinMarker.addTo(map);
 
-/*
-const resetMarker = (lat, lng) => {
-  mainPinMarker.setLatLng([lat, lng]);
+export const resetMainMarkerPosition = () => {
+  mainPinMarker.setLatLng({
+    lat: TokyoCenterCoord.LAT,
+    lng: TokyoCenterCoord.LNG,
+  });
 };
-resetMarker(TokyoCenterCoord.LAT, TokyoCenterCoord.LNG);
-*/
+
+const groupLayer = L.layerGroup();
 
 const createMarker = (point) => {
   const marker = L.marker(
@@ -69,7 +72,7 @@ const createMarker = (point) => {
   );
 
   marker
-    .addTo(map)
+    .addTo(groupLayer)
     .bindPopup(
       renderCard(point),
       {
@@ -82,10 +85,12 @@ export const addPoints = (adverts) => {
   adverts.forEach(createMarker);
 };
 
+export const clearMap = () => groupLayer.clearLayers();
+
 const addressInput = document.querySelector('#address');
 
 mainPinMarker.on('drag', (evt) => {
   const { lat, lng } = evt.target.getLatLng();
 
-  addressInput.value = `${lat}, ${lng}`;
+  addressInput.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 });

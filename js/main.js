@@ -1,42 +1,42 @@
-import { createRandomAdverts } from './random-adverts.js';
-import { addPoints } from './map.js';
-import './form.js';
-import './filter.js';
+import { getData } from './api.js';
+import { showErrorMessage, showGetDataErrorMessage, showSuccessMessage } from './message.js';
+import { addPoints, createMap, resetMainMarkerPosition, clearMap } from './map.js';
+import { setFormSubmit, activateForm } from './form.js';
+import { setFiltersChangeHandler, filterAdverts, activateFilter } from './filter.js';
+import { deactivatePage } from './page.js';
 
-const randomAdverts = createRandomAdverts(10);
+const SIMILAR_ADVERT_COUNT = 10;
 
-/*
-// api.js
-const getData = (onSuccess, onFail) => {
-  fetch(RequestUrl.GET)
-    .then((response) => response.json())
-    .then(onSuccess)
-    .catch(onFail);
-};
+deactivatePage();
 
-const onGetDataSuccess = (adverts) => {
-  if (adverts.length > 0) {
-    addPoints(adverts);
+resetMainMarkerPosition();
+
+createMap(() => {
+  activateForm();
+
+  getData ((adverts) => {
+    if (adverts.length === 0) {
+      return;
+    }
+
+    addPoints(adverts.slice(0, SIMILAR_ADVERT_COUNT));
+
     activateFilter();
-  }
-  // getData()
-};
+    setFiltersChangeHandler(() => {
+      const filteredAdverts = filterAdverts(adverts, SIMILAR_ADVERT_COUNT);
 
-const onGetDataFail = (adverts) => {
-  showError('Не удалось получить данные');
-};
+      clearMap();
+      addPoints(filteredAdverts);
+    });
+  },
+  () => {
+    showGetDataErrorMessage();
+  });
+});
 
-/*
-getData(onGetDataSuccess, onGetDataFail);
-*/
-
-addPoints(randomAdverts);
-
-// https://up.htmlacademy.ru/javascript/23/check/tasks/1512041/12
-// При реализации фильтрации нужно учесть критерий:
-//  Б23 (не получится использовать метод массива .filter)
-//  Б24 (вложенный цикл (1-2) только для удобства-features)
-// Так делать не нужно:
-//  adverts.filter(() => ).filter(() => ).slice(0, 10);
-
-// сложные фильтры: проверка стоимости и удобства
+setFormSubmit(
+  () => {
+    showSuccessMessage();
+  },
+  () => showErrorMessage('Не удалось отправить форму. Попробуйте ещё раз'),
+);
