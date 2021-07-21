@@ -17,22 +17,38 @@ export const deactivateFilter = () => {
   });
 };
 
+const housingType = document.querySelector('#housing-type');
+const housingRooms = document.querySelector('#housing-rooms');
+const housingGuests = document.querySelector('#housing-guests');
 const housingFeatures = document.querySelector('#housing-features');
 
 let currentFeatures = [];
 
-// кокретные функции фильтрации
+const filterFeatures = (offer) => {
+  currentFeatures = Array.from(housingFeatures.querySelectorAll('input:checked'));
+  const features = offer.features;
+  return currentFeatures.every((feature) => features.include(feature.value));
+};
 
-// общая функция фильтрации
+const filterOfferType = (offer) => housingType.value === 'any' || housingType.value === offer.type;
+
+const filterOfferRooms = (offer) => housingRooms.value === 'any' || +housingRooms.value === offer.rooms;
+
+const filterOfferGuests = (offer) => housingGuests.value === 'any' || +housingGuests.value === offer.guests;
+
+const filterOffer = (offer) =>
+  filterOfferType(offer) &&
+  filterOfferGuests(offer) &&
+  filterOfferRooms(offer) &&
+  filterFeatures(offer);
 
 export const filterAdverts = (adverts, limit) => {
-  currentFeatures = Array.from(housingFeatures.querySelectorAll('input:checked'));
 
   const filteredAdverts = [];
   for (let i = 0; i < adverts.length; i++) {
     const advert = adverts[i];
 
-    if (true) { // если true
+    if (filterOffer(advert.offer)) {
       filteredAdverts.push(advert);
     }
 
@@ -46,8 +62,6 @@ export const filterAdverts = (adverts, limit) => {
   return filteredAdverts;
 };
 
-filterAdverts();
-
 let onFiltersChange = null;
 
 filters.addEventListener('change', () => {
@@ -58,4 +72,8 @@ filters.addEventListener('change', () => {
 
 export const setFiltersChangeHandler = (callback) => {
   onFiltersChange = callback;
+};
+
+export const resetFilter = () => {
+  filters.reset();
 };

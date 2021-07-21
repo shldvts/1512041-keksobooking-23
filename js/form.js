@@ -95,12 +95,6 @@ roomInput.addEventListener('change', () => {
   validateRoomsAndCapacityInput();
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  // restrictTitleLength();
-  // syncTypeAndPriceInput();
-  // validateRoomsAndCapacityInput();
-});
-
 const fieldsets = advertForm.querySelectorAll('fieldset');
 
 export const deactivateForm = () => {
@@ -129,4 +123,8 @@ export const setFormSubmit = (onSuccess, onFail) => {
       new FormData(evt.target),
     );
   });
+};
+
+export const resetForm = () => {
+  advertForm.reset();
 };
