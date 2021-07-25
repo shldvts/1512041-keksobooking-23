@@ -55,7 +55,7 @@ mainPinMarker.addTo(map);
 
 const addressInput = document.querySelector('#address');
 
-const renderAddressInput = () => {
+export const renderAddressInput = () => {
   const { lat, lng } = mainPinMarker.getLatLng();
 
   addressInput.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;

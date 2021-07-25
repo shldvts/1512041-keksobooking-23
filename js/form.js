@@ -1,12 +1,12 @@
 import { sendData } from './api.js';
 
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+
 const advertForm = document.querySelector('.ad-form');
 
 // Валидация поля заголовка
 const titleInput = advertForm.querySelector('#title');
-
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
 
 const restrictTitleLength = () => {
   const valueLength = titleInput.value.length;
@@ -95,6 +95,7 @@ roomInput.addEventListener('change', () => {
   validateRoomsAndCapacityInput();
 });
 
+// Активация и деактивация формы
 const fieldsets = advertForm.querySelectorAll('fieldset');
 
 export const deactivateForm = () => {
@@ -113,6 +114,11 @@ export const activateForm = () => {
   });
 };
 
+// Сброс формы
+export const resetForm = () => {
+  advertForm.reset();
+};
+
 export const setFormSubmit = (onSuccess, onFail) => {
   advertForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -123,8 +129,4 @@ export const setFormSubmit = (onSuccess, onFail) => {
       new FormData(evt.target),
     );
   });
-};
-
-export const resetForm = () => {
-  advertForm.reset();
 };

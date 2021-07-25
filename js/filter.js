@@ -1,3 +1,8 @@
+const USER_OPTION = 'any';
+const LOW_PRICE = 10000;
+const HIGH_PRICE = 50000;
+const DEFAULT_FEATURES = ['wi-fi', 'parking'];
+
 const filters = document.querySelector('.map__filters');
 const filterSelects = filters.querySelectorAll('select, fieldset');
 
@@ -18,29 +23,57 @@ export const deactivateFilter = () => {
 };
 
 const housingType = document.querySelector('#housing-type');
+const housingPrice = document.querySelector('#housing-price');
 const housingRooms = document.querySelector('#housing-rooms');
 const housingGuests = document.querySelector('#housing-guests');
 const housingFeatures = document.querySelector('#housing-features');
 
-let currentFeatures = [];
+const filterOfferType = (offer) => housingType.value === USER_OPTION || housingType.value === offer.type;
 
-const filterFeatures = (offer) => {
-  currentFeatures = Array.from(housingFeatures.querySelectorAll('input:checked'));
-  const features = offer.features;
-  return currentFeatures.every((feature) => features.include(feature.value));
+const filterOfferPrice = (offer) => {
+  switch (housingPrice.value) {
+    case USER_OPTION:
+      return true;
+    case 'low':
+      return offer.price < LOW_PRICE;
+    case 'middle':
+      return offer.price >= LOW_PRICE && offer.price < HIGH_PRICE;
+    case 'high':
+      return offer.price >= HIGH_PRICE;
+    default:
+      return false;
+  }
 };
 
-const filterOfferType = (offer) => housingType.value === 'any' || housingType.value === offer.type;
+const filterOfferRooms = (offer) => housingRooms.value === USER_OPTION || +housingRooms.value === offer.rooms;
 
-const filterOfferRooms = (offer) => housingRooms.value === 'any' || +housingRooms.value === offer.rooms;
+const filterOfferGuests = (offer) => housingGuests.value === USER_OPTION || +housingGuests.value === offer.guests;
 
-const filterOfferGuests = (offer) => housingGuests.value === 'any' || +housingGuests.value === offer.guests;
+const filterOfferFeatures = (offer) => {
+  const checkedFeatures = housingFeatures.querySelectorAll('input[type="checkbox"]:checked');
+
+  if(!offer.features) {
+    DEFAULT_FEATURES;
+    return;
+  }
+
+  let count = 0;
+
+  checkedFeatures.forEach((feature) => {
+    if (offer.features.includes(feature.value)) {
+      count++;
+    }
+  });
+
+  return count === checkedFeatures.length;
+};
 
 const filterOffer = (offer) =>
   filterOfferType(offer) &&
   filterOfferGuests(offer) &&
   filterOfferRooms(offer) &&
-  filterFeatures(offer);
+  filterOfferPrice(offer) &&
+  filterOfferFeatures(offer);
 
 export const filterAdverts = (adverts, limit) => {
 
@@ -56,8 +89,6 @@ export const filterAdverts = (adverts, limit) => {
       break;
     }
   }
-
-  currentFeatures = null;
 
   return filteredAdverts;
 };

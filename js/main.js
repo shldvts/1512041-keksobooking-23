@@ -1,6 +1,6 @@
 import { getData } from './api.js';
 import { showErrorMessage, showGetDataErrorMessage, showSuccessMessage } from './message.js';
-import { addPoints, createMap, clearMap, resetMainMarkerPosition } from './map.js';
+import { addPoints, createMap, clearMap, resetMainMarkerPosition, renderAddressInput } from './map.js';
 import { setFormSubmit, activateForm, resetForm } from './form.js';
 import { setFiltersChangeHandler, filterAdverts, activateFilter, resetFilter } from './filter.js';
 import { deactivatePage } from './page.js';
@@ -41,6 +41,7 @@ const resetPageState = () => {
   resetFilter();
   resetMainMarkerPosition();
   getAnotherData();
+  renderAddressInput();
 };
 
 createMap(() => {
